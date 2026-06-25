@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MNHC | ECM Training: Populations of Focus</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --br:#5C1F00;--or:#E8721A;--sg:#7A9B5A;--st:#8B6B4A;
+  --cr:#FDF8F2;--wh:#FFFFFF;--dk:#1A1A1A;--md:#4A4A4A;
+  --ok:#2D6A2D;--ok-bg:#E8F5E3;--rd:#8B1A1A;--rd-bg:#FDEAEA;
+  --amber:#FFF8EC;--amber-b:#E8A020;
+}
+html,body{height:100%;font-family:"Segoe UI",system-ui,sans-serif;background:#0f0603;overflow:hidden}
+#shell{display:flex;flex-direction:column;height:100vh;max-width:960px;margin:0 auto;background:var(--cr)}
+
+/* HEADER */
+#hdr{background:var(--br);padding:9px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ht{color:#fff;font-size:11.5px;font-weight:700}
+.hs{color:var(--or);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+#pw{background:rgba(255,255,255,.15);border-radius:3px;height:4px;width:130px;margin-top:4px}
+#pb{background:var(--or);height:4px;border-radius:3px;width:0;transition:width .5s}
+
+/* SECTION TABS */
+#stabs{background:rgba(91,31,0,.06);border-bottom:1px solid rgba(91,31,0,.1);display:flex;flex-shrink:0;overflow-x:auto;padding:0 14px}
+.stab{padding:7px 12px;font-size:10.5px;font-weight:600;color:var(--st);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s}
+.stab.on{color:var(--or);border-color:var(--or)}
+
+/* PLAYER */
+#player{background:#130804;padding:9px 18px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:2px solid var(--or)}
+.havs{display:flex}
+.hav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--or);flex-shrink:0}
+.hav.a{background:var(--br);color:var(--or)}.hav.b{background:var(--or);color:#fff;margin-left:-7px}
+.ep-inf{flex:1}.ep-t{color:#fff;font-size:11.5px;font-weight:700}.ep-h2{color:rgba(255,255,255,.5);font-size:10px;margin-top:1px}
+.pbtns{display:flex;align-items:center;gap:7px}
+.pbtn{background:none;border:none;cursor:pointer;color:#fff;font-size:17px;padding:3px;line-height:1;transition:color .15s}.pbtn:hover{color:var(--or)}
+#playbtn{width:36px;height:36px;border-radius:50%;background:var(--or);border:none;cursor:pointer;font-size:14px;color:#fff;display:flex;align-items:center;justify-content:center}
+.spdbtn{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);font-size:10px;font-weight:700;padding:3px 7px;border-radius:4px;cursor:pointer}.spdbtn.on{background:var(--or);color:#fff}
+.wave{display:flex;gap:2px;align-items:center}
+.wave span{display:inline-block;width:2px;background:var(--or);border-radius:2px;animation:wv 1s ease-in-out infinite;opacity:0}
+.wave.go span{opacity:1}
+.wave span:nth-child(1){animation-delay:0s}.wave span:nth-child(2){animation-delay:.15s}.wave span:nth-child(3){animation-delay:.3s}.wave span:nth-child(4){animation-delay:.45s}
+@keyframes wv{0%,100%{height:3px}50%{height:14px}}
+
+/* VOICE SETTINGS */
+#vset{display:none;background:#1b0d06;border-bottom:2px solid var(--or);padding:11px 18px;flex-shrink:0;flex-direction:column;gap:9px}
+#vset.on{display:flex}
+.vrow{display:flex;align-items:center;gap:10px}
+.vrow>label{color:rgba(255,255,255,.78);font-size:11px;font-weight:700;min-width:84px;flex-shrink:0}
+.vrow select{flex:1;min-width:0;background:#2a1810;color:#fff;border:1px solid rgba(255,255,255,.22);border-radius:5px;padding:6px 8px;font-size:11.5px}
+.vrow input[type=range]{flex:1;min-width:0;accent-color:var(--or);height:4px}
+.vval{color:var(--or)!important;font-size:10.5px!important;font-weight:700!important;min-width:46px;text-align:right}
+.vbtns{flex-wrap:wrap;gap:8px}
+.vtest,.vreset{background:var(--or);color:#fff;border:none;border-radius:6px;padding:6px 13px;font-size:11px;font-weight:700;cursor:pointer}
+.vtest:hover,.vreset:hover{opacity:.88}.vreset{background:rgba(255,255,255,.16)}
+.vhint{color:rgba(255,255,255,.45);font-size:9.5px;flex:1;min-width:150px;line-height:1.35}
+.vgear.on{color:var(--or)}
+.accchips{display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0}
+.acc{background:rgba(255,255,255,.1);color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:4px 11px;font-size:10.5px;font-weight:700;cursor:pointer;transition:all .15s}
+.acc:hover{border-color:var(--or)}.acc.on{background:var(--or);color:#fff;border-color:var(--or)}
+.accnote{color:rgba(255,255,255,.42);font-size:9px;width:100%;line-height:1.3;margin-top:2px}
+.vcyc{background:rgba(255,255,255,.14);color:#fff;border:none;border-radius:6px;width:30px;height:30px;font-size:14px;cursor:pointer;flex-shrink:0}.vcyc:hover{background:var(--or)}
+.vchk{font-size:10px!important;font-weight:400!important;color:rgba(255,255,255,.6)!important;min-width:0!important;display:flex;align-items:center;gap:6px;cursor:pointer}
+.vchk input{accent-color:var(--or)}
+
+/* CONTENT */
+#content{flex:1;overflow:hidden;position:relative;min-height:0}
+.ep{position:absolute;inset:0;overflow-y:auto;padding:18px 24px;opacity:0;pointer-events:none;transition:opacity .3s}
+.ep.on{opacity:1;pointer-events:all}
+
+/* TITLE EP */
+.title-ep{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:var(--br);padding:28px;margin:-18px -24px}
+.show-nm{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--or);margin-bottom:12px}
+.title-ep h1{font-size:27px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:8px}
+.tagline{font-size:13px;color:rgba(255,255,255,.65);margin-bottom:22px;line-height:1.5;max-width:520px}
+.hintro{display:flex;gap:14px;justify-content:center;margin-bottom:20px}
+.hcard{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:12px 16px;text-align:center}
+.hav2{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin:0 auto 7px;border:2px solid var(--or)}
+.hav2.a{background:var(--br);color:var(--or)}.hav2.b{background:var(--or);color:#fff}
+.hnm{font-size:12px;font-weight:700;color:#fff}.hrl{font-size:10px;color:rgba(255,255,255,.55);margin-top:2px;line-height:1.3}
+.stats-row{display:flex;gap:10px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+.stat{background:rgba(255,255,255,.07);border-radius:8px;padding:9px 14px;text-align:center}
+.sv{font-size:17px;font-weight:700;color:var(--or)}.sl{font-size:10px;color:rgba(255,255,255,.5);margin-top:2px}
+.startbtn{background:var(--or);color:#fff;border:none;border-radius:8px;padding:12px 32px;font-size:14px;font-weight:700;cursor:pointer}.startbtn:hover{opacity:.88}
+
+/* EP HEADER */
+.ep-hdr{margin-bottom:14px}
+.ep-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:4px}
+.ep-h{font-size:20px;font-weight:700;color:var(--br);line-height:1.2;margin-bottom:3px}
+.ep-dsc{font-size:12.5px;color:var(--st);line-height:1.45}
+.ep-div{height:3px;width:36px;background:var(--or);border-radius:2px;margin:8px 0 14px}
+
+/* CONVERSATION */
+.convo{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.msg{display:flex;gap:9px;align-items:flex-start;transition:opacity .3s,transform .3s}
+.msg.b{flex-direction:row-reverse}
+.mav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px}
+.mav.a{background:var(--br);color:var(--or);border:1.5px solid var(--or)}.mav.b{background:var(--or);color:#fff}
+.mbody{max-width:80%}
+.mname{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.msg.a .mname{color:var(--br)}.msg.b .mname{color:var(--or);text-align:right}
+.bubble{border-radius:10px;padding:9px 13px;font-size:12.5px;line-height:1.65;color:var(--dk)}
+.msg.a .bubble{background:#fff;border:1px solid rgba(0,0,0,.08);border-top-left-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.msg.b .bubble{background:var(--br);color:rgba(255,255,255,.9);border-top-right-radius:3px}
+.msg.b .bubble strong{color:var(--or)}
+.bubble strong{color:var(--br);font-weight:600}
+.hl{display:inline-block;background:rgba(232,114,26,.13);color:var(--br);font-weight:700;padding:1px 7px;border-radius:4px;font-size:12px}
+
+/* STEP PROCEDURE CARDS */
+.proc-step{display:flex;gap:0;margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid rgba(0,0,0,.08)}
+.proc-num{min-width:44px;background:var(--br);color:var(--or);font-size:20px;font-weight:700;display:flex;align-items:flex-start;justify-content:center;padding-top:14px}
+.proc-body{flex:1;background:#fff;padding:12px 14px}
+.proc-title{font-size:13px;font-weight:700;color:var(--br);margin-bottom:8px;border-bottom:2px solid var(--or);padding-bottom:5px}
+.proc-body ul{padding-left:16px}
+.proc-body li{font-size:12.5px;color:var(--md);margin-bottom:5px;line-height:1.5}
+.proc-body li strong{color:var(--dk);font-weight:600}
+.note{background:var(--amber);border-left:3px solid var(--amber-b);border-radius:0 6px 6px 0;padding:8px 12px;margin-top:8px;font-size:12px;color:#5A3A00;line-height:1.45}
+.warn{background:var(--rd-bg);border-left:3px solid var(--rd);border-radius:0 6px 6px 0;padding:8px 12px;margin-top:8px;font-size:12px;color:var(--rd);line-height:1.45}
+.good{background:var(--ok-bg);border-left:3px solid var(--sg);border-radius:0 6px 6px 0;padding:8px 12px;margin-top:8px;font-size:12px;color:var(--ok);line-height:1.45}
+
+/* SCREENSHOTS */
+figure.ss{margin:10px 0;background:#fff;border-radius:8px;padding:10px;border:1px solid rgba(0,0,0,.08)}
+figure.ss img{max-width:100%;height:auto;border-radius:4px;display:block;border:1px solid rgba(0,0,0,.06)}
+figure.ss figcaption{font-size:11px;color:var(--st);font-style:italic;margin-top:6px;line-height:1.4}
+
+/* INFO CARDS */
+.cards{display:grid;gap:10px;margin:10px 0}
+.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
+.card{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid rgba(0,0,0,.07)}
+.card.sg{border-top:3px solid var(--sg)}.card.or{border-top:3px solid var(--or)}.card.st{border-top:3px solid var(--st)}.card.br{border-top:3px solid var(--br)}.card.rd{border-top:3px solid var(--rd)}
+.card h4{font-size:11px;font-weight:700;color:var(--br);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.card p,.card li{font-size:12px;color:var(--md);line-height:1.5}
+.card ul{padding-left:14px}.card li{margin-bottom:3px}
+
+/* SMARTPHRASE TABLE */
+.sp-table{width:100%;border-collapse:collapse;font-size:11.5px;margin:10px 0;border-radius:10px;overflow:hidden}
+.sp-table th{background:var(--br);color:#fff;padding:8px 10px;text-align:left;font-size:10.5px;font-weight:600}
+.sp-table td{padding:7px 10px;border-bottom:1px solid rgba(0,0,0,.06);color:var(--md);vertical-align:top}
+.sp-table tr:nth-child(even) td{background:rgba(0,0,0,.02)}
+.sp-table td:first-child{font-weight:700;color:var(--br);white-space:nowrap;font-family:"Courier New",monospace;font-size:11px}
+
+/* ROADMAP */
+.roadmap{position:relative;padding:8px 0;margin:12px 0}
+.rm-track{position:absolute;left:22px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--or),var(--sg))}
+.rm-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;position:relative;opacity:0;transform:translateX(-10px);transition:opacity .5s,transform .5s}
+.rm-item.vis{opacity:1;transform:translateX(0)}
+.rm-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:4px;border:2px solid #fff;z-index:1;margin-left:15px}
+.rm-dot.done{background:var(--sg);box-shadow:0 0 0 2px var(--sg)}
+.rm-dot.act{background:var(--or);box-shadow:0 0 0 2.5px var(--or)}
+.rm-dot.fut{background:#fff;box-shadow:0 0 0 2px var(--st)}
+.rm-body{flex:1;background:#fff;border-radius:9px;padding:10px 13px;border:1px solid rgba(0,0,0,.07)}
+.rm-date{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;color:var(--or)}
+.rm-title{font-size:12.5px;font-weight:700;color:var(--br);margin-bottom:2px}
+.rm-detail{font-size:11.5px;color:var(--md);line-height:1.4}
+
+/* VIZ */
+.viz-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--st);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.viz-label::after{content:"";flex:1;height:1px;background:rgba(0,0,0,.08)}
+.flow-vis{background:#fff;border-radius:12px;padding:14px;border:1px solid rgba(0,0,0,.07);margin:10px 0}
+.flow-vis svg{width:100%;display:block}
+
+/* SOURCES */
+.src{background:rgba(91,31,0,.05);border-radius:8px;padding:9px 13px;margin-top:12px}
+.src-l{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--st);margin-bottom:5px}
+.src a{display:block;font-size:11px;color:var(--or);text-decoration:none;margin-bottom:3px}.src a:hover{text-decoration:underline}
+
+/* QUIZ */
+.qwrap{display:flex;flex-direction:column;gap:16px}
+.qblock{background:#fff;border-radius:10px;padding:14px 16px;border:1px solid rgba(0,0,0,.08)}
+.qnum{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--st);margin-bottom:4px}
+.qqq{font-size:13.5px;font-weight:600;color:var(--br);margin-bottom:10px;line-height:1.4}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{background:#F5F2EF;border:2px solid rgba(0,0,0,.1);border-radius:8px;padding:9px 13px;font-size:12px;color:var(--md);cursor:pointer;text-align:left;transition:all .15s;width:100%;line-height:1.3}
+.qopt:hover:not(:disabled){border-color:var(--or);color:var(--dk)}
+.qopt.co{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:600}
+.qopt.wr{background:var(--rd-bg);border-color:var(--rd);color:var(--rd)}
+.qfb{margin-top:8px;padding:8px 12px;border-radius:7px;font-size:12px;line-height:1.45;display:none}
+.qfb.sh{display:block}.qfb.co{background:var(--ok-bg);color:var(--ok)}.qfb.wr{background:var(--rd-bg);color:var(--rd)}
+.qprow{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+.qpb{background:rgba(0,0,0,.1);border-radius:3px;height:4px;flex:1}
+.qpf{background:var(--sg);height:4px;border-radius:3px;width:0;transition:width .3s}
+.sbox{background:var(--br);border-radius:10px;padding:20px;text-align:center;display:none;margin-top:14px}
+.sbox.sh{display:block}
+.sring{width:72px;height:72px;border-radius:50%;border:4px solid var(--or);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;flex-direction:column}
+.sp2{font-size:22px;font-weight:700;color:var(--or)}.sp3{font-size:10px;color:rgba(255,255,255,.65)}
+.smsg{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px}.ssub{font-size:12px;color:rgba(255,255,255,.7)}
+
+/* COMPLETE */
+.comp-ep{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:var(--br);padding:28px;margin:-18px -24px}
+.comp-ep h2{font-size:26px;font-weight:700;color:#fff;margin-bottom:8px}
+.comp-ep p{color:rgba(255,255,255,.72);font-size:13px;line-height:1.6;max-width:420px;margin-bottom:18px}
+.cert{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:16px 24px}
+.cert p{color:rgba(255,255,255,.88);font-size:12.5px;line-height:1.7}
+#fsc{color:var(--or);font-size:17px;font-weight:700;margin-top:12px}
+
+/* NAV */
+#nav{background:#fff;border-top:1px solid rgba(0,0,0,.1);padding:11px 18px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.dots{display:flex;gap:4px;flex-wrap:wrap;max-width:280px}
+.dot{width:6px;height:6px;border-radius:50%;background:rgba(0,0,0,.14);cursor:pointer;transition:all .22s}
+.dot.ac{background:var(--or);width:16px;border-radius:3px}.dot.vi{background:var(--sg)}
+.ni{font-size:11px;color:var(--st)}
+.nbtns{display:flex;gap:7px}
+.nbtn{border:none;border-radius:7px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.nbtn.bk{background:transparent;color:var(--st);border:1.5px solid rgba(0,0,0,.18)}.nbtn.bk:hover{background:rgba(0,0,0,.04)}
+.nbtn.nx{background:var(--or);color:#fff}.nbtn.nx:hover{opacity:.88}
+</style>
+</head>
+<body>
+<div id="shell">
+<div id="hdr">
+  <div>
+    <div class="ht">Mission Neighborhood Health Center</div>
+    <div class="hs">ECM Training: Populations of Focus · INTERACTIVE PODCAST · ENGLISH</div>
+  </div>
+  <div style="text-align:right">
+    <div class="hs" id="epctr" style="color:rgba(255,255,255,.5)">Episode 1 of 10</div>
+    <div id="pw"><div id="pb"></div></div>
+  </div>
+</div>
+<div id="stabs"><div class="stab on" onclick="goSec(0)">1 · Why It Matters</div><div class="stab" onclick="goSec(1)">2 · The 6 Populations</div><div class="stab" onclick="goSec(2)">3 · Registries & Metrics</div><div class="stab" onclick="goSec(3)">4 · Quiz</div></div>
+<div id="player">
+  <div class="havs"><div class="hav a">A</div><div class="hav b">B</div></div>
+  <div class="ep-inf">
+    <div class="ep-t" id="ptitle">ECM Training: Populations of Focus</div>
+    <div class="ep-h2">Anna (Host · CEO, MNHC) · Brian, DHSc (Co-Host · Chief PHM & VBC Officer)</div>
+  </div>
+  <div class="pbtns">
+    <div class="wave" id="wave"><span></span><span></span><span></span><span></span></div>
+    <button class="pbtn" onclick="goBack()">&#9198;</button>
+    <button id="playbtn" onclick="togglePlay()">&#9654;</button>
+    <button class="pbtn" onclick="goNext()">&#9197;</button>
+    <button class="spdbtn on" id="s1" onclick="setSpd(1,this)">1&#215;</button>
+    <button class="spdbtn" id="s15" onclick="setSpd(1.5,this)">1.5&#215;</button>
+    <button class="spdbtn" id="s2" onclick="setSpd(2,this)">2&#215;</button>
+    <button class="pbtn vgear" id="vgear" onclick="toggleVset()" title="Voice settings">&#127899;</button>
+  </div>
+</div>
+<div id="vset">
+  <div class="vrow"><label>&#127908; Anna voice</label><select id="selA" onchange="pickVoiceA(this.value)"></select></div>
+  <div class="vrow"><label>&#127908; Brian voice</label><select id="selB" onchange="pickVoiceB(this.value)"></select><button class="vcyc" onclick="cycleBrian()">&#8635;</button></div>
+  <div class="vrow"><label></label><label class="vchk"><input type="checkbox" id="allB" onchange="toggleAllB(this)"> Show all voices for Brian</label></div>
+  <div class="vrow"><label>Brian accent</label><div class="accchips" id="accB"></div></div>
+  <div class="vrow"><label>Speed</label><input type="range" id="rateSld" min="0.7" max="1.2" step="0.05" value="1" oninput="setRate(this.value)"><span class="vval" id="rateLbl">1.00&#215;</span></div>
+  <div class="vrow"><label>Brian tone</label><input type="range" id="depSld" min="0.7" max="1.05" step="0.01" value="1" oninput="setDepth(this.value)"><span class="vval" id="depLbl">energetic</span></div>
+  <div class="vrow vbtns"><button class="vtest" onclick="testVoices()">&#9654; Test voices</button><button class="vreset" onclick="resetVoice()">Reset to auto</button><span class="vhint">Pick a voice marked &#9733;. Best voices in Microsoft Edge.</span></div>
+</div>
+<div id="content">
+<div class="ep on" id="ep0" data-sec="0">
+  <div class="title-ep">
+    <div class="show-nm">🎙 MNHC Clinical Training Podcast</div>
+    <h1>ECM: Populations of Focus Training</h1>
+    <div class="tagline">An interactive podcast guide to CalAIM's six Populations of Focus registries — ICD-10 criteria, DHCS/SFHP policy, and the OCHIN Radar Dashboard. Eight episodes and a scored quiz.</div>
+    <div class="hintro">
+      <div class="hcard"><div class="hav2 a">A</div><div class="hnm">Anna</div><div class="hrl">Host · CEO, MNHC</div></div>
+      <div class="hcard"><div class="hav2 b">B</div><div class="hnm">Brian, DHSc</div><div class="hrl">Co-Host · Chief PHM & VBC Officer</div></div>
+    </div>
+    <div class="flow-vis" style="max-width:660px;margin:14px auto 18px"><svg viewBox="0 0 660 72">
+<rect x="0" y="0" width="105" height="66" rx="7" fill="#5C1F00"/>
+<text x="52" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#E8721A">POF 1</text>
+<text x="52" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">Homelessness</text>
+<text x="52" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">Z59.00&#8211;Z59.9</text>
+<text x="52" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">Z65.2 &#183; Z63.0</text>
+<rect x="111" y="0" width="105" height="66" rx="7" fill="#7A3010"/>
+<text x="163" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#E8721A">POF 2</text>
+<text x="163" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">Serious MH/SUD</text>
+<text x="163" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">F10&#8211;F19 &#183; F20&#8211;F29</text>
+<text x="163" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">F30&#8211;F39 &#183; F40&#8211;F48</text>
+<rect x="222" y="0" width="105" height="66" rx="7" fill="#8B6B4A"/>
+<text x="274" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#fff">POF 3</text>
+<text x="274" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">Justice Involved</text>
+<text x="274" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">Z65.1 &#183; Z65.2</text>
+<text x="274" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">Z65.3</text>
+<rect x="333" y="0" width="105" height="66" rx="7" fill="#5C1F00"/>
+<text x="385" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#E8721A">POF 4</text>
+<text x="385" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">High ED Use</text>
+<text x="385" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">5+ ED/6mo (21+)</text>
+<text x="385" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">3+ ED/6mo (&lt;21)</text>
+<rect x="444" y="0" width="105" height="66" rx="7" fill="#7A3010"/>
+<text x="496" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#E8721A">POF 5</text>
+<text x="496" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">Birth Equity</text>
+<text x="496" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">Race/Eth +</text>
+<text x="496" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">Pregnant/Postpartum</text>
+<rect x="555" y="0" width="105" height="66" rx="7" fill="#8B6B4A"/>
+<text x="607" y="18" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" font-weight="700" fill="#fff">POF 6</text>
+<text x="607" y="33" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#fff">LTC Risk</text>
+<text x="607" y="48" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.65)">G30 &#183; F03 &#183; I69.3</text>
+<text x="607" y="61" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="7.5" fill="rgba(255,255,255,.5)">Z74.01 &#183; Z91.81</text>
+</svg></div>
+    <div class="stats-row">
+      <div class="stat"><div class="sv">8 Episodes</div><div class="sl">CalAIM + SFHP + OCHIN</div></div>
+      <div class="stat"><div class="sv">6 Populations</div><div class="sl">SOW #25160 · SA236</div></div>
+      <div class="stat"><div class="sv">Scored Quiz</div><div class="sl">8 Questions · Certificate</div></div>
+    </div>
+    <button class="startbtn" onclick="goTo(1)">▶ Start Training</button>
+  </div>
+</div>
+<div class="ep" id="ep1" data-sec="0">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 1 · The CalAIM Framework</div>
+    <div class="ep-h">What Is a Population of Focus and Why Does It Matter?</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Brian makes the case for understanding Populations of Focus — what they are, why DHCS created them, and where ECM sits within the CalAIM Population Health Management continuum.</div>
+  </div>
+  <div class="convo" id="c1"></div>
+  <div class="viz-label">CalAIM Population Health Management Continuum</div>
+<div class="flow-vis"><svg viewBox="0 0 580 190" id="phm-svg">
+<defs><linearGradient id="pgr" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0%" stop-color="#5C1F00"/><stop offset="100%" stop-color="#7A3010"/>
+</linearGradient></defs>
+<g id="p3" style="opacity:0;transition:opacity .6s 0s">
+  <polygon points="290,14 40,178 540,178" fill="rgba(91,31,0,.08)" stroke="rgba(91,31,0,.2)" stroke-width="1"/>
+  <text x="290" y="172" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="10" fill="#8B6B4A" font-weight="600">Basic PHM &#183; All Medi-Cal Members &#183; Wellness &amp; Prevention</text>
+</g>
+<g id="p2" style="opacity:0;transition:opacity .6s .4s">
+  <polygon points="290,52 112,162 468,162" fill="rgba(122,155,90,.25)" stroke="#7A9B5A" stroke-width="1.5"/>
+  <text x="290" y="152" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="10" fill="#2D6A2D" font-weight="600">Complex Care Management (CCM) &#183; Medium&#8211;High Risk</text>
+</g>
+<g id="p1" style="opacity:0;transition:opacity .6s .8s">
+  <polygon points="290,82 188,148 392,148" fill="url(#pgr)"/>
+  <text x="290" y="120" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="13" fill="#fff" font-weight="700">ECM</text>
+  <text x="290" y="136" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.85)">Highest Need &#183; Populations of Focus</text>
+</g>
+<g id="p4" style="opacity:0;transition:opacity .6s 1.2s">
+  <rect x="28" y="10" width="140" height="36" rx="7" fill="#5C1F00"/>
+  <text x="98" y="25" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#E8721A" font-weight="700">MNHC 6 POF Registries</text>
+  <text x="98" y="39" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.8)">OCHIN SOW #25160 &#183; SA236</text>
+  <line x1="168" y1="28" x2="234" y2="90" stroke="#E8721A" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="412" y="10" width="140" height="36" rx="7" fill="#7A9B5A"/>
+  <text x="482" y="25" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="#fff" font-weight="700">SFHP Authorization</text>
+  <text x="482" y="39" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.85)">5-day auth &#183; MCP oversight</text>
+  <line x1="412" y1="28" x2="346" y2="90" stroke="#7A9B5A" stroke-width="1.5" stroke-dasharray="4 3"/>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep2" data-sec="0">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 2 · Policy Layers</div>
+    <div class="ep-h">DHCS, SFHP & MNHC — The Policy Ecosystem</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Brian connects the three tiers governing POF work at MNHC: DHCS policy guidance, SFHP's local requirements, and the operational registries OCHIN is building in Epic.</div>
+  </div>
+  <div class="convo" id="c2"></div>
+  <div class="viz-label">The ECM Policy Ecosystem &#8212; Three Layers</div>
+<div class="flow-vis"><svg viewBox="0 0 720 140" id="pol-svg">
+<defs><marker id="ar2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+  <path d="M2 1L8 5L2 9" fill="none" stroke="#8B6B4A" stroke-width="1.5" stroke-linecap="round"/>
+</marker></defs>
+<g id="pl1" style="opacity:0;transition:opacity .5s 0s">
+  <rect x="10" y="30" width="185" height="80" rx="9" fill="#5C1F00"/>
+  <text x="102" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" fill="#E8721A" font-weight="700">DHCS CalAIM</text>
+  <text x="102" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.85)">ECM Policy Guide &#183; Jan 2026</text>
+  <text x="102" y="87" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Defines all POFs + eligibility</text>
+  <text x="102" y="100" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="#E8721A" font-weight="600">THE FLOOR</text>
+</g>
+<g id="pl2" style="opacity:0;transition:opacity .5s .4s">
+  <line x1="195" y1="70" x2="255" y2="70" stroke="#8B6B4A" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#ar2)"/>
+  <rect x="260" y="30" width="185" height="80" rx="9" fill="#7A9B5A"/>
+  <text x="352" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" fill="#fff" font-weight="700">SFHP</text>
+  <text x="352" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.9)">San Francisco Health Plan</text>
+  <text x="352" y="87" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.78)">Auth &#183; VBP Metrics &#183; JI Liaisons</text>
+  <text x="352" y="100" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="#fff" font-weight="600">LOCAL LAYER</text>
+</g>
+<g id="pl3" style="opacity:0;transition:opacity .5s .8s">
+  <line x1="445" y1="70" x2="505" y2="70" stroke="#8B6B4A" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#ar2)"/>
+  <rect x="510" y="30" width="185" height="80" rx="9" fill="#8B6B4A"/>
+  <text x="602" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" fill="#fff" font-weight="700">MNHC + OCHIN</text>
+  <text x="602" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.9)">Radar Dashboard &#183; SOW #25160</text>
+  <text x="602" y="87" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.78)">6 Registries &#183; Clarity_SA236</text>
+  <text x="602" y="100" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="#fff" font-weight="600">OPERATIONAL</text>
+</g>
+<g id="pl4" style="opacity:0;transition:opacity .5s 1.2s">
+  <text x="360" y="130" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#8B6B4A">SFHP Referral &#x2192; CareManagement_Referrals@sfhp.org &#183; (415) 615-4501 &#183; 5 business day authorization</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep3" data-sec="1">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 3 · POF 1 & 3</div>
+    <div class="ep-h">Homelessness and Justice-Involved Populations</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">The two most interconnected POFs in our Mission population — with the exact ICD-10 codes from OCHIN SOW #25160, and why Z65.2 appears in both registries.</div>
+  </div>
+  <div class="convo" id="c3"></div>
+  <div class="viz-label">Homeless + Justice ICD-10 Registry Reference</div>
+<div class="flow-vis"><svg viewBox="0 0 680 160" id="hj-svg">
+<g id="hj1" style="opacity:0;transition:opacity .5s 0s">
+  <text x="8" y="16" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#5C1F00" letter-spacing="1">POF 1 &#183; HOMELESS</text>
+  <rect x="8" y="22" width="192" height="56" rx="7" fill="#5C1F00"/>
+  <text x="104" y="44" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#E8721A">Z59.00&#8211;Z59.9</text>
+  <text x="104" y="60" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Homelessness &amp; Housing Instability</text>
+  <text x="104" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.6)">Last 12mo OR active problem list</text>
+  <rect x="210" y="22" width="148" height="56" rx="7" fill="#7A3010"/>
+  <text x="284" y="44" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#E8721A">Z65.2</text>
+  <text x="284" y="60" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Exit Institution &#x2192; Homeless</text>
+  <text x="284" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.6)">&#9733; Shared w/ Justice POF</text>
+  <rect x="368" y="22" width="148" height="56" rx="7" fill="#5C1F00"/>
+  <text x="442" y="44" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#E8721A">Z63.0</text>
+  <text x="442" y="60" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Fleeing DV / Trafficking</text>
+  <text x="442" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.6)">Housing instability pathway</text>
+</g>
+<g id="hj2" style="opacity:0;transition:opacity .5s .5s">
+  <text x="8" y="96" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#5C1F00" letter-spacing="1">POF 3 &#183; JUSTICE INVOLVED</text>
+  <rect x="8" y="102" width="192" height="52" rx="7" fill="#8B6B4A"/>
+  <text x="104" y="124" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#fff">Z65.1</text>
+  <text x="104" y="140" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Imprisonment &amp; Incarceration</text>
+  <rect x="210" y="102" width="148" height="52" rx="7" fill="#5C1F00"/>
+  <text x="284" y="124" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#E8721A">Z65.2 &#9733;</text>
+  <text x="284" y="140" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Release from Prison (SFHP 6-mo)</text>
+  <rect x="368" y="102" width="148" height="52" rx="7" fill="#8B6B4A"/>
+  <text x="442" y="124" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="11" font-weight="700" fill="#fff">Z65.3</text>
+  <text x="442" y="140" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Arrest &#183; Custody &#183; Litigation</text>
+</g>
+<g id="hj3" style="opacity:0;transition:opacity .5s 1s">
+  <rect x="530" y="22" width="144" height="132" rx="8" fill="rgba(232,114,26,.12)" stroke="#E8721A" stroke-width="1.5" stroke-dasharray="4 2"/>
+  <text x="602" y="44" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#E8721A">DUAL ELIGIBILITY</text>
+  <text x="602" y="62" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">Z65.2 appears in</text>
+  <text x="602" y="78" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">BOTH registries.</text>
+  <text x="602" y="98" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">Unhoused patient</text>
+  <text x="602" y="114" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">releasing from jail</text>
+  <text x="602" y="130" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">qualifies for</text>
+  <text x="602" y="146" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#5C1F00">both at once.</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep4" data-sec="1">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 4 · POF 2</div>
+    <div class="ep-h">Serious Mental Health & Substance Use Disorder</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Likely MNHC's highest-volume POF — four ICD-10 code ranges, DHCS SMHS/DMC threshold requirements, and why a diagnosis alone is not enough.</div>
+  </div>
+  <div class="convo" id="c4"></div>
+  <div class="viz-label">Serious MH / SUD &#8212; ICD-10 Code Ranges</div>
+<div class="flow-vis"><svg viewBox="0 0 620 100" id="mh-svg">
+<g id="mh1" style="opacity:0;transition:opacity .5s 0s">
+  <rect x="8" y="8" width="138" height="80" rx="8" fill="#5C1F00"/>
+  <text x="77" y="36" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">F10&#8211;F19</text>
+  <text x="77" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Substance Use</text>
+  <text x="77" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Alcohol &#183; Opioid</text>
+  <text x="77" y="83" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.55)">Cannabis &#183; Stimulants</text>
+</g>
+<g id="mh2" style="opacity:0;transition:opacity .5s .25s">
+  <rect x="158" y="8" width="138" height="80" rx="8" fill="#7A3010"/>
+  <text x="227" y="36" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">F20&#8211;F29</text>
+  <text x="227" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Schizophrenia</text>
+  <text x="227" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Psychotic Disorders</text>
+  <text x="227" y="83" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.55)">Delusional</text>
+</g>
+<g id="mh3" style="opacity:0;transition:opacity .5s .5s">
+  <rect x="308" y="8" width="138" height="80" rx="8" fill="#5C1F00"/>
+  <text x="377" y="36" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">F30&#8211;F39</text>
+  <text x="377" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Mood Disorders</text>
+  <text x="377" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Bipolar &#183; MDD</text>
+  <text x="377" y="83" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.55)">Persistent depressive</text>
+</g>
+<g id="mh4" style="opacity:0;transition:opacity .5s .75s">
+  <rect x="458" y="8" width="154" height="80" rx="8" fill="#7A3010"/>
+  <text x="535" y="36" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">F40&#8211;F48</text>
+  <text x="535" y="56" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Anxiety / Stress</text>
+  <text x="535" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">PTSD &#183; OCD &#183; Phobias</text>
+  <text x="535" y="83" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8" fill="rgba(255,255,255,.55)">Adjustment disorders</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep5" data-sec="1">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 5 · POF 4</div>
+    <div class="ep-h">High Risk for Avoidable Hospital & ED Utilization</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Defined by utilization frequency, not diagnosis — different thresholds for adults and youth, and how the OCHIN Radar Dashboard will automatically flag these patients.</div>
+  </div>
+  <div class="convo" id="c5"></div>
+  <div class="viz-label">High ED / Hospital Utilization &#8212; Eligibility Thresholds (DHCS)</div>
+<div class="flow-vis"><svg viewBox="0 0 680 188" id="ut-svg">
+<g id="ut1" style="opacity:0;transition:opacity .5s 0s">
+  <text x="8" y="16" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#5C1F00" letter-spacing="1">ADULTS (21+)</text>
+  <rect x="8" y="22" width="320" height="76" rx="9" fill="#5C1F00"/>
+  <text x="168" y="50" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="36" font-weight="700" fill="#fff">5+</text>
+  <text x="168" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="rgba(255,255,255,.85)">ED visits in last 6 months</text>
+  <text x="168" y="88" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.6)">OCHIN Radar Registry Threshold</text>
+  <rect x="352" y="22" width="320" height="76" rx="9" fill="#7A3010"/>
+  <text x="512" y="50" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="36" font-weight="700" fill="#fff">2+</text>
+  <text x="512" y="70" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="rgba(255,255,255,.85)">unplanned hospital / SNF admissions</text>
+  <text x="512" y="88" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.6)">in 12 months (DHCS policy)</text>
+</g>
+<g id="ut2" style="opacity:0;transition:opacity .5s .35s">
+  <text x="8" y="114" font-family="Segoe UI,sans-serif" font-size="9" font-weight="700" fill="#5C1F00" letter-spacing="1">CHILDREN / YOUTH (&lt;21)</text>
+  <rect x="8" y="120" width="320" height="62" rx="9" fill="#7A9B5A"/>
+  <text x="168" y="148" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="36" font-weight="700" fill="#fff">3+</text>
+  <text x="168" y="172" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.85)">ED visits in last 6 months</text>
+  <rect x="352" y="120" width="320" height="62" rx="9" fill="#8B6B4A"/>
+  <text x="512" y="148" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="36" font-weight="700" fill="#fff">2+</text>
+  <text x="512" y="172" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.85)">unplanned hospital / SNF admissions in 12 months</text>
+</g>
+<g id="ut3" style="opacity:0;transition:opacity .5s .7s">
+  <rect x="8" y="188" width="664" height="0" rx="0"/>
+  <text x="340" y="188" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="#8B6B4A">Either criterion qualifies &#183; OCHIN registry tracks ED visits &#183; Care managers must account for admissions in manual referral review</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep6" data-sec="1">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 6 · POF 5</div>
+    <div class="ep-h">Birth Equity</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">A race/ethnicity plus timing window POF — pregnant or through 12 months postpartum — designed to address documented disparities in maternal mortality.</div>
+  </div>
+  <div class="convo" id="c6"></div>
+  <div class="viz-label">Birth Equity &#8212; Both Criteria Required</div>
+<div class="flow-vis"><svg viewBox="0 0 620 128" id="be-svg">
+<g id="be1" style="opacity:0;transition:opacity .5s 0s">
+  <rect x="10" y="10" width="286" height="108" rx="9" fill="#5C1F00"/>
+  <text x="153" y="32" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A" letter-spacing=".5">RACE / ETHNICITY</text>
+  <text x="26" y="52" font-family="Segoe UI,sans-serif" font-size="9" fill="#fff">&#x2713;  American Indian or Alaskan Native</text>
+  <text x="26" y="68" font-family="Segoe UI,sans-serif" font-size="9" fill="#fff">&#x2713;  Black or African American</text>
+  <text x="26" y="84" font-family="Segoe UI,sans-serif" font-size="9" fill="#fff">&#x2713;  Native Hawaiian / Filipino</text>
+  <text x="26" y="100" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.8)">    Guamanian &#183; Chamorro &#183; Samoan &#183; Pacific Islander</text>
+</g>
+<g id="be2" style="opacity:0;transition:opacity .5s .4s">
+  <text x="308" y="72" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="26" font-weight="700" fill="#E8721A">+</text>
+  <rect x="320" y="10" width="290" height="108" rx="9" fill="#7A3010"/>
+  <text x="465" y="32" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A" letter-spacing=".5">TIMING WINDOW</text>
+  <text x="465" y="62" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="16" font-weight="700" fill="#fff">Pregnant</text>
+  <text x="465" y="78" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="10" fill="rgba(255,255,255,.6)">OR</text>
+  <text x="465" y="98" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="16" font-weight="700" fill="#fff">Postpartum</text>
+  <text x="465" y="114" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9" fill="rgba(255,255,255,.8)">through 12 months after delivery</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep7" data-sec="1">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 7 · POF 6</div>
+    <div class="ep-h">LTC Risk & Institutionalization</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Five ICD-10 codes identifying community-dwelling adults at risk of nursing facility placement — with a focus on intervening before institutionalization occurs.</div>
+  </div>
+  <div class="convo" id="c7"></div>
+  <div class="viz-label">LTC Risk / Institutionalization &#8212; ICD-10 Codes</div>
+<div class="flow-vis"><svg viewBox="0 0 680 96" id="ltc-svg">
+<g id="ltc1" style="opacity:0;transition:opacity .45s 0s">
+  <rect x="8" y="8" width="122" height="80" rx="8" fill="#5C1F00"/>
+  <text x="69" y="38" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">G30.*</text>
+  <text x="69" y="58" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Alzheimer's</text>
+  <text x="69" y="74" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Disease</text>
+</g>
+<g id="ltc2" style="opacity:0;transition:opacity .45s .2s">
+  <rect x="140" y="8" width="122" height="80" rx="8" fill="#7A3010"/>
+  <text x="201" y="38" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">F03.*</text>
+  <text x="201" y="58" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Unspecified</text>
+  <text x="201" y="74" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Dementia</text>
+</g>
+<g id="ltc3" style="opacity:0;transition:opacity .45s .4s">
+  <rect x="272" y="8" width="122" height="80" rx="8" fill="#5C1F00"/>
+  <text x="333" y="38" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">I69.3*</text>
+  <text x="333" y="58" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Stroke</text>
+  <text x="333" y="74" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Sequelae</text>
+</g>
+<g id="ltc4" style="opacity:0;transition:opacity .45s .6s">
+  <rect x="404" y="8" width="122" height="80" rx="8" fill="#7A3010"/>
+  <text x="465" y="38" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#E8721A">Z74.01</text>
+  <text x="465" y="58" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Bed</text>
+  <text x="465" y="74" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Confinement</text>
+</g>
+<g id="ltc5" style="opacity:0;transition:opacity .45s .8s">
+  <rect x="536" y="8" width="136" height="80" rx="8" fill="#8B6B4A"/>
+  <text x="604" y="38" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="15" font-weight="700" fill="#fff">Z91.81</text>
+  <text x="604" y="58" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="9.5" fill="#fff" font-weight="600">Fall Risk</text>
+  <text x="604" y="74" text-anchor="middle" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">At risk for falling</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep8" data-sec="2">
+  <div class="ep-hdr">
+    <div class="ep-tag">🎙 Episode 8 · Registries & Metrics</div>
+    <div class="ep-h">The OCHIN Radar Dashboard — Documentation, Registries & Performance</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">Three things every care manager must internalize: clean ICD-10 documentation feeding the registries, the five Radar Dashboard metrics driving VBP, and managing multi-POF patients.</div>
+  </div>
+  <div class="convo" id="c8"></div>
+  <div class="viz-label">OCHIN Radar Dashboard &#8212; 5 Required Metrics (SOW #25160)</div>
+<div class="flow-vis"><svg viewBox="0 0 680 158" id="rad-svg">
+<g id="rd1" style="opacity:0;transition:opacity .4s 0s">
+  <rect x="8" y="8" width="322" height="60" rx="8" fill="#5C1F00"/>
+  <text x="20" y="30" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A">1. Health &amp; Service Utilization</text>
+  <text x="20" y="48" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Count ER visits + Hospital Admissions since program active date</text>
+</g>
+<g id="rd2" style="opacity:0;transition:opacity .4s .2s">
+  <rect x="342" y="8" width="330" height="60" rx="8" fill="#7A3010"/>
+  <text x="354" y="30" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A">2. No-Show / Drop-Out Rate</text>
+  <text x="354" y="48" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">% of scheduled sessions missed without rescheduling</text>
+</g>
+<g id="rd3" style="opacity:0;transition:opacity .4s .4s">
+  <rect x="8" y="80" width="210" height="70" rx="8" fill="#7A3010"/>
+  <text x="20" y="102" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A">3. Active Programs</text>
+  <text x="20" y="120" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">Active / enrolled programs</text>
+  <text x="20" y="136" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">within Epic EHR</text>
+</g>
+<g id="rd4" style="opacity:0;transition:opacity .4s .6s">
+  <rect x="230" y="80" width="212" height="70" rx="8" fill="#5C1F00"/>
+  <text x="242" y="102" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#E8721A">4. Primary Care Visit Rate</text>
+  <text x="242" y="120" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.85)">(PCP visits &#247; members) &#215; 1,000</text>
+  <text x="242" y="136" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.7)">Rolling 12 months</text>
+</g>
+<g id="rd5" style="opacity:0;transition:opacity .4s .8s">
+  <rect x="454" y="80" width="218" height="70" rx="8" fill="#7A9B5A"/>
+  <text x="466" y="102" font-family="Segoe UI,sans-serif" font-size="10" font-weight="700" fill="#fff">5. SDoH Screening Completion</text>
+  <text x="466" y="120" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.9)">% patients with &#8805;1 complete</text>
+  <text x="466" y="136" font-family="Segoe UI,sans-serif" font-size="8.5" fill="rgba(255,255,255,.8)">SDOH screening on file</text>
+</g>
+</svg></div>
+</div>
+<div class="ep" id="ep9" data-sec="3">
+  <div class="ep-hdr">
+    <div class="ep-tag">&#127381; Quiz · MNHC ECM Bootcamp</div>
+    <div class="ep-h">Knowledge Check: ECM Populations of Focus</div>
+    <div class="ep-div"></div>
+    <div class="ep-dsc">8 questions covering ICD-10 criteria, eligibility thresholds, Radar Dashboard metrics, and DHCS/SFHP policy.</div>
+  </div>
+  <div class="qprow">
+    <span style="font-size:12px;color:var(--st)" id="qst">Answer all 8 questions to continue</span>
+    <div class="qpb"><div class="qpf" id="qpf"></div></div>
+    <span style="font-size:12px;font-weight:700;color:var(--br)" id="qct">0 / 8</span>
+  </div>
+  <div class="qwrap" id="qcont"></div>
+  <div class="sbox" id="sbox">
+    <div class="sring"><div class="sp2" id="spct">0%</div><div class="sp3" id="spts">0/8</div></div>
+    <div class="smsg" id="smsg"></div><div class="ssub" id="ssub"></div>
+  </div>
+</div>
+<div class="ep" id="ep10" data-sec="3">
+  <div class="comp-ep">
+    <div style="font-size:52px;margin-bottom:14px">🎙&#x2705;</div>
+    <h2>Training Complete!</h2>
+    <p>You've completed the <strong style="color:var(--or)">MNHC ECM: Populations of Focus Training</strong>. Your completion has been recorded.</p>
+    <div class="cert">
+      <p>ECM POF Training · CalAIM Enhanced Care Management · ICM Service Line
+Mission Neighborhood Health Center · 2026</p>
+    </div>
+    <div id="fsc"></div>
+  </div>
+</div>
+
+
+</div>
+<div id="nav">
+  <div class="dots" id="dots"></div>
+  <div class="ni" id="ni">Episode 1 of 11</div>
+  <div class="nbtns">
+    <button class="nbtn bk" id="btnbk" onclick="goBack()" style="display:none">&#x2190; Back</button>
+    <button class="nbtn nx" id="btnnx" onclick="goNext()">Next →</button>
+  </div>
+</div>
+</div>
+<script>
+const CV={
+  1:[
+    {w:"a",n:"Anna",t:"Brian, I want to start with a question our care managers ask all the time: what exactly is a Population of Focus? And why does it shape everything we do in ECM?"},
+    {w:"b",n:"Brian",t:"It's the right starting point, Anna. Under CalAIM, a Population of Focus — a POF — is the specific group of Medi-Cal members who qualify for Enhanced Care Management. DHCS defined these groups because ECM is the highest tier of care management in the state, and it's resource-intensive. You can't offer it to everyone — you have to target it at the people who need it most. The POF definitions are how DHCS draws that line."},
+    {w:"a",n:"Anna",t:"And where does ECM sit in the bigger picture of how Medi-Cal manages population health?"},
+    {w:"b",n:"Brian",t:"Think of it as a pyramid. At the base you have Basic Population Health Management — that's for every Medi-Cal managed care member, broad wellness and prevention. In the middle is Complex Care Management, for members with rising or high risk. And at the very top is ECM, for the highest-need, highest-cost members — the ones with complex medical, behavioral, and social needs who qualify for one or more of the Populations of Focus. ECM is the most intensive, most resource-heavy intervention. That's why the POF criteria matter so much."},
+    {w:"a",n:"Anna",t:"And for us at MNHC specifically — we now have six registries in Epic that track these populations?"},
+    {w:"b",n:"Brian",t:"That's right. Through our signed SOW with OCHIN — SOW number 25160 — OCHIN is building six custom population registries directly in our Clarity database, surfaced through a Radar Dashboard. The SOW was signed in June 2026 and work is running through September 30th. Each registry uses specific ICD-10 codes and eligibility logic defined in the SOW to automatically flag patients. This is one of the biggest infrastructure investments we've made in population health. Those registries will feed our outreach, our ECM enrollment decisions, and our quality metrics."},
+  ],
+  2:[
+    {w:"a",n:"Anna",t:"Walk me through the policy layers here. DHCS, SFHP, MNHC — how do they each shape the POF work?"},
+    {w:"b",n:"Brian",t:"Three distinct layers, each with its own authority. DHCS is the state department that created and defines the Populations of Focus. Their ECM Policy Guide — last updated January 2026 — is the authoritative source. It lists every POF, the eligibility criteria, the clinical thresholds, and the ICD-10 logic. Anything DHCS defines is the floor — the minimum standard every managed care plan has to follow."},
+    {w:"a",n:"Anna",t:"And SFHP builds on that?"},
+    {w:"b",n:"Brian",t:"Exactly. San Francisco Health Plan is our managed care plan for most of our Medi-Cal panel. SFHP takes the DHCS POF definitions and adds local requirements — their referral process, their authorization timelines, their quality metrics tied to our value-based payment contract. To refer a patient for ECM, the referral goes to SFHP's care management intake team at CareManagement underscore Referrals at sfhp.org — and SFHP has five business days to make an authorization decision. They also run dedicated Justice-Involved Liaisons who help with provider assignment for that specific population."},
+    {w:"a",n:"Anna",t:"And then MNHC's layer is what we're building with OCHIN?"},
+    {w:"b",n:"Brian",t:"Right. Our layer is the operational one — how we actually identify patients across all six populations in our Epic system, how we track them in Compass Rose, how we report on them. The OCHIN Radar Dashboard will surface all six POF populations and their registry metrics in one place. The SFCCC network — San Francisco Community Clinic Consortium — will also have access to these tools. So we're building something that serves the whole network, not just MNHC."},
+  ],
+  3:[
+    {w:"a",n:"Anna",t:"Let's go through each population. Start with the one our care managers probably see most — Homelessness."},
+    {w:"b",n:"Brian",t:"POF one: Homeless. The MNHC registry pulls in any patient who is alive AND has one of the following ICD-10 codes documented in the last year or on their active problem list. The primary code range is Z59.00 through Z59.9 — that's homelessness and housing instability in all its forms. The registry also captures Z65.2, which is exiting an institution into homelessness — important for patients leaving incarceration or inpatient settings. And Z63.0 covers problems in relationship with a spouse or partner, which captures people fleeing domestic violence or trafficking."},
+    {w:"a",n:"Anna",t:"That Z63.0 one surprises some people — can you say more about why that's in the homelessness POF?"},
+    {w:"b",n:"Brian",t:"It reflects the reality that a significant number of people experiencing homelessness are there because they left a dangerous domestic situation. DHCS recognized that fleeing domestic violence or human trafficking is a pathway into housing instability — so that code gets captured in the Homeless POF rather than being treated as an isolated social issue. For our Mission District population, that connection is very real. When our care managers see Z63.0 on a problem list, it should prompt an immediate housing stability assessment alongside the safety planning."},
+    {w:"a",n:"Anna",t:"And the Justice Involved POF — how does that connect?"},
+    {w:"b",n:"Brian",t:"POF three: Justice Involved. Three codes: Z65.1 for imprisonment and incarceration, Z65.2 for problems related to release from prison, and Z65.3 for other legal circumstances — arrest, custody, litigation. You'll notice Z65.2 appears in both the Homeless and Justice Involved registries. That's intentional. A patient releasing from incarceration into homelessness can qualify for both POFs simultaneously, and SFHP authorizes ECM for Justice Involved members for six months from date of release automatically — that's a presumptive authorization. So when a care manager sees Z65.2, they should be thinking about both registries at once."},
+  ],
+  4:[
+    {w:"a",n:"Anna",t:"POF two — Serious Mental Health and Substance Use Disorder. This is a big one for our panel."},
+    {w:"b",n:"Brian",t:"Probably our highest-volume POF at MNHC. The registry logic is: alive, plus any of the following ICD-10 ranges documented in the last year or on the active problem list. F10 through F19 covers Substance Use Disorders — alcohol, opioid, cannabis, stimulant, all of it. F20 through F29 is schizophrenia and psychotic disorders. F30 through F39 is mood disorders — major depression, bipolar, everything in between. And F40 through F48 covers anxiety and stress-related disorders."},
+    {w:"a",n:"Anna",t:"That's a wide range. How does SFHP define eligibility for this POF specifically?"},
+    {w:"b",n:"Brian",t:"SFHP follows DHCS criteria, which require that the member meet eligibility for Specialty Mental Health Services delivered by the Mental Health Plan, or the Drug Medi-Cal Organized Delivery System, or Drug Medi-Cal program. So it's not just having a diagnosis — the member has to actually meet the clinical threshold for specialty behavioral health services. That's the distinction between someone with a mild anxiety diagnosis and someone qualifying for this POF. For our Behavioral Health and Disease Management programs, this is the population our care managers spend the most time with — and the documentation requirements in Epic are especially important here."},
+    {w:"a",n:"Anna",t:"What's your recommendation when a care manager is genuinely unsure whether a patient crosses that threshold?"},
+    {w:"b",n:"Brian",t:"Convene a case conference with the PCP. That's the answer, every time. Uncertainty about SMI POF inclusion is one of the situations where a care manager should not be making a unilateral call. The PCP has longitudinal context on the patient's behavioral health trajectory — history of hospitalizations, prior medication trials, functional impairment — that may not be visible in a single encounter review. A ten-minute call with the PCP creates shared accountability: if the PCP confirms the clinical picture supports specialty-level need, you have a much stronger basis for the ECM referral and the documentation holds up under SFHP review. It also protects the care manager. Don't guess on this POF. When in doubt, loop in the PCP before you refer."},
+  ],
+  5:[
+    {w:"a",n:"Anna",t:"POF four — High ED and Hospital Utilization. Walk me through the thresholds."},
+    {w:"b",n:"Brian",t:"This one is defined entirely by utilization frequency, not by a diagnosis. For adults 21 and older: five or more emergency room visits in the last six months. For patients under 21: three or more ER visits in the same six-month window. The DHCS policy also allows inclusion of patients who are at risk for avoidable utilization even if they don't meet the numerical threshold yet — so it's not a hard cutoff if clinical judgment suggests the trajectory is heading there."},
+    {w:"a",n:"Anna",t:"And how does Compass Rose surface these patients for our care managers?"},
+    {w:"b",n:"Brian",t:"Once the OCHIN registry is live, the Radar Dashboard will automatically flag patients hitting these thresholds from our claims and encounter data. Before that, care managers can use the High Utilization workqueue in Compass Rose, or run a manual review of the Health and Service Utilization metric — which is one of the five Radar Dashboard metrics in the SOW. That metric counts ER visits and hospital admissions since the program start date. It's both a patient identification tool and a quality tracking tool for enrolled members."},
+    {w:"a",n:"Anna",t:"Does the threshold only count emergency room visits, or do hospital admissions factor in as well?"},
+    {w:"b",n:"Brian",t:"Hospital admissions absolutely factor in — and this is a gap we need to close because it gets missed in practice. Under DHCS policy, the High Utilization POF is met by either ED visits OR unplanned hospital admissions. For adults 21 and older: two or more unplanned hospital admissions or short-term SNF stays in a 12-month period qualifies — in addition to the five ED visits threshold. For children and youth under 21: two or more unplanned hospital or SNF admissions in 12 months also qualifies, alongside the three ED visit threshold. The OCHIN registry tracks ED visits specifically per the SOW criteria — but care managers conducting manual reviews must account for inpatient admissions in their referral decisions. A patient with three ED visits and two hospitalizations qualifies under DHCS policy even if the registry hasn't flagged them yet. That clinical judgment has to live with the care manager."},
+  ],
+  6:[
+    {w:"a",n:"Anna",t:"POF five — Birth Equity. Tell me who qualifies and why this population matters."},
+    {w:"b",n:"Brian",t:"Birth Equity is one of the most important POFs from a health equity standpoint. It targets pregnant or postpartum members — through twelve months after delivery — who belong to specific racial and ethnic groups experiencing documented disparities in maternal health outcomes. The specific groups in the MNHC registry: American Indian or Alaskan Native, Black or African American, and Native Hawaiian, Filipino, Guamanian or Chamorro, Samoan, or Other Pacific Islander. These are the communities facing the highest rates of maternal mortality and morbidity in California."},
+    {w:"a",n:"Anna",t:"So both criteria have to be met — the race/ethnicity AND the pregnancy or postpartum status?"},
+    {w:"b",n:"Brian",t:"Both required. And I want to emphasize the postpartum window — twelve months. A lot of programs stop thinking about a patient after delivery, but the data is clear that the first year postpartum carries significant health risk, especially for these communities. Our care managers should be actively monitoring the problem list for pregnancy-related documentation and making sure patients in these demographic groups are flagged in the registry throughout that whole twelve-month period. This POF went live statewide in January 2024 under DHCS policy, and it's a meaningful part of how CalAIM is trying to address racial inequities in maternal health."},
+  ],
+  7:[
+    {w:"a",n:"Anna",t:"Last population — POF six: LTC Risk and Institutionalization. What's the clinical picture here?"},
+    {w:"b",n:"Brian",t:"This one covers adults living in the community who are at risk of needing long-term care or nursing facility placement. The ICD-10 anchors in our registry: G30 dot star for Alzheimer's disease, F03 dot star for unspecified dementia, I69.3 star for stroke sequelae, Z74.01 for bed confinement, and Z91.81 for patients at risk for falling. These codes identify patients whose functional decline puts them at real risk of institutionalization if they don't get intensive care coordination."},
+    {w:"a",n:"Anna",t:"And DHCS actually has two separate POFs that map to this — community-based LTC risk and nursing facility residents transitioning out?"},
+    {w:"b",n:"Brian",t:"Correct. DHCS POF five is adults living in the community at risk for institutionalization — that's what our registry captures with those ICD-10 codes. POF six in the DHCS framework is adult nursing facility residents transitioning back to the community — that's a distinct population with its own ECM approach, including care transition planning and community resource linkage. Both went live statewide in January 2023. For MNHC, our SOW registry focuses on the community-based risk population — the patients we can intervene with before they need placement. SFHP has a specific contract with the SF Department of Disability and Aging Services to serve the nursing facility transition group through the Community Living Fund program."},
+  ],
+  8:[
+    {w:"a",n:"Anna",t:"Tie it all together for me — what should care managers walk away knowing about these registries and the Radar Dashboard?"},
+    {w:"b",n:"Brian",t:"Three things. First — the registries are automated, but they're only as good as the documentation. If a care manager documents a Z59 code for housing instability and it doesn't land on the active problem list, the patient doesn't get flagged. Clean ICD-10 documentation in Epic is what feeds the registry logic. That's on every care manager at every encounter."},
+    {w:"a",n:"Anna",t:"What's the second?"},
+    {w:"b",n:"Brian",t:"The five Radar Dashboard metrics are how SFHP and DHCS measure whether our ECM program is working. Health and service utilization, no-show and dropout rate, number of active programs, primary care visit rate, and SDoH screening completion. These aren't just reporting numbers — they're what drives our VBP performance scorecard. If our no-show rate is high or our SDoH screening completion is low, that shows up in our quality metrics and in our revenue. Every care manager's work feeds these metrics directly."},
+    {w:"a",n:"Anna",t:"And the third?"},
+    {w:"b",n:"Brian",t:"Multiple POFs can and do apply to the same patient. A patient who is unhoused, has an opioid use disorder, and just released from incarceration could qualify for three populations simultaneously. That patient should be enrolled in ECM under all applicable POFs, and the care plan has to reflect the complexity of all those intersecting needs. The registry will flag them in all three buckets — it's our job as care managers to make sure the ECM encounter documentation and the care plan actually address each dimension. That's what high-quality, high-impact ECM looks like for our Mission District community."},
+  ],
+};
+const QUIZ=[
+  {q:"When a care manager is genuinely uncertain about whether a patient qualifies for the Serious MH/SUD Population of Focus, what is the recommended next step?",
+   opts:["Submit the ECM referral and let SFHP decide","Enroll the patient under a different program and revisit later","Convene a case conference with the patient's PCP before referring","Document the uncertainty in the care plan and proceed"],c:2,
+   exp:"When uncertain about SMI POF eligibility, the right move is to convene a case conference with the PCP first. The PCP has longitudinal context — prior hospitalizations, medication history, functional impairment — that supports a stronger, more defensible referral and protects against SFHP denial."},
+  {q:"A patient has a documented diagnosis of Bipolar I Disorder and is enrolled in the Mental Health Plan for specialty services. Which Population of Focus does this patient qualify for?",
+   opts:["Homeless (POF 1)","Serious MH/SUD (POF 2)","High ED Utilization (POF 4)","LTC Risk (POF 6)"],c:1,
+   exp:"Bipolar I falls in the F30–F39 Mood Disorders range, and Mental Health Plan enrollment confirms the patient meets the specialty-level clinical threshold required for the Serious MH/SUD POF — it's not just a diagnosis, the clinical threshold must be met."},
+  {q:"For the High ED Utilization POF at MNHC, adults (21+) must have how many ER visits in the last 6 months?",
+   opts:["2 or more","3 or more","5 or more","7 or more"],c:2,
+   exp:"Adults 21 and older need 5 or more ER visits in the past 6 months. The threshold is 3 or more for patients under 21. Hospital admissions (2+ unplanned in 12 months) are also a qualifying criterion under DHCS policy."},
+  {q:"Which of the following is NOT one of the 5 Radar Dashboard metrics in the OCHIN SOW?",
+   opts:["No-Show / Drop-Out Rate","SDoH Screening Completion","Medication Adherence Rate","Primary Care Visit Rate"],c:2,
+   exp:"Medication Adherence Rate is not in the SOW. The 5 metrics are: Health & Service Utilization, No-Show/Drop-Out Rate, Number of Active Programs, Primary Care Visit Rate, and SDoH Screening Completion."},
+  {q:"The Birth Equity POF requires the member to be pregnant or postpartum AND belong to a specific race/ethnicity group. Through how many months postpartum does eligibility extend?",
+   opts:["3 months","6 months","12 months","24 months"],c:2,
+   exp:"Birth Equity eligibility extends through 12 months postpartum, in addition to the race/ethnicity requirement (American Indian/Alaskan Native, Black/African American, or Native Hawaiian/Pacific Islander/Filipino)."},
+  {q:"A patient was recently released from county jail and has no stable housing. Which Populations of Focus may they qualify for at the same time?",
+   opts:["Justice Involved only","Homeless only","Both Homeless AND Justice Involved","High ED Utilization and Homeless"],c:2,
+   exp:"A patient releasing from incarceration into homelessness can qualify for both POF 1 (Homeless) and POF 3 (Justice Involved) simultaneously. The same condition — exiting an institution into homelessness — appears in both registry criteria, and SFHP provides a 6-month automatic authorization for Justice Involved members post-release."},
+  {q:"An 82-year-old patient lives alone, has unspecified dementia, and had a fall last month. Their family is worried about nursing home placement. Which Population of Focus applies?",
+   opts:["Serious MH/SUD (POF 2)","High ED Utilization (POF 4)","Birth Equity (POF 5)","LTC Risk/Institutionalization (POF 6)"],c:3,
+   exp:"This patient fits the LTC Risk/Institutionalization POF — a community-dwelling adult at risk of nursing facility placement. Unspecified dementia and fall risk are both qualifying conditions in the registry criteria. The goal of this POF is to intervene before institutionalization occurs."},
+  {q:"Under DHCS policy, the High ED/Hospital Utilization POF for adults can be met through which of the following?",
+   opts:["Five or more ED visits in 6 months only","Two or more unplanned hospital admissions in 12 months only","Either 5+ ED visits in 6 months OR 2+ unplanned hospital admissions in 12 months","Both must occur in the same time period to qualify"],c:2,
+   exp:"DHCS policy allows qualification through either criterion — ED visits OR hospital admissions. Adults qualify with 5+ ED visits in 6 months OR 2+ unplanned hospital/SNF admissions in 12 months. The OCHIN registry tracks ED visits, but care managers must account for both when conducting manual referral reviews."},
+];
+
+const synth=window.speechSynthesis;
+let vA=null,vB=null,utts=[],uIdx=0,playing=false,spd=1;
+let qAns={},qDone=false,qRend=false,cvRend={};
+let userRate=1, annaPitch=1.0, brianPitch=1.0, manualA=false, manualB=false, allLangsB=false;
+
+// Rank English voices, strongly preferring modern neural/"Natural"/"Online" voices,
+// then matching the requested gender by known voice-name pools.
+function rankVoicesEN(vs,gender){
+  const fNames=["aria","jenny","michelle","ava","emma","samantha","allison","susan","zoe","karen","victoria","fiona","tessa","serena","moira","catherine","kate","zira","hazel","libby","sonia","clara","amber","ashley","nova","female"];
+  const mNames=["guy","christopher","eric","brian","davis","tony","jason","andrew","roger","steffan","daniel","david","mark","alex","tom","aaron","evan","nathan","fred","oliver","arthur","george","ryan","thomas","william","male"];
+  const want=gender==="f"?fNames:mNames, avoid=gender==="f"?mNames:fNames;
+  return vs.map(v=>{
+    const n=(v.name||"").toLowerCase(), lang=(v.lang||"").toLowerCase();
+    if(!lang.startsWith("en"))return[-1,v];
+    let s=0;
+    if(n.includes("natural"))s+=120;
+    if(n.includes("online"))s+=70;
+    if(n.includes("google"))s+=45;
+    if(n.includes("enhanced")||n.includes("premium")||n.includes("siri"))s+=25;
+    if(want.some(x=>n.includes(x)))s+=40;
+    if(avoid.some(x=>n.includes(x)))s-=55;
+    if(lang==="en-us")s+=18; else if(lang.startsWith("en-gb"))s+=8;
+    return[s,v];
+  }).filter(x=>x[0]>=0).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+}
+function loadV(){
+  const vs=synth.getVoices();if(!vs.length)return;
+  const f=rankVoicesEN(vs,"f"), m=rankVoicesEN(vs,"m");
+  if(!manualA) vA=f[0]||vs.find(v=>(v.lang||"").toLowerCase().startsWith("en"))||vs[0];
+  if(!manualB) vB=vs.find(v=>/daniel/i.test(v.name))||m.find(v=>v!==vA)||m[0]||vs.find(v=>(v.lang||"").toLowerCase().startsWith("en")&&v!==vA)||vs[0];
+  refreshVoiceUI();
+}
+if(synth.onvoiceschanged!==undefined)synth.onvoiceschanged=loadV;
+setTimeout(loadV,100);
+setTimeout(loadV,600);
+
+// ── VOICE CONTROLS ────────────────────────────────────────────────────
+function langVoices(){const vs=synth.getVoices();const sel=vs.filter(v=>(v.lang||"").toLowerCase().startsWith("en"));return sel.length?sel:vs;}
+function vLabel(v){const g=guessGender(v);const sym=g==="m"?" ♂":g==="f"?" ♀":"";const star=/natural|online|enhanced|premium|google|siri/i.test(v.name)?" ★":"";return v.name+" — "+v.lang+sym+star;}
+const MPOOL=["guy","christopher","eric","brian","davis","tony","jason","andrew","roger","steffan","daniel","david","mark","alex","tom","aaron","evan","nathan","fred","oliver","arthur","george","ryan","thomas","william","juan","jorge","gerardo","liberato","raul","raúl","carlos","diego","enrique","miguel","pedro","dalmacio","lorenzo","luciano","gustavo","alonso","male","hombre","masculin"];
+const FPOOL=["aria","jenny","michelle","ava","emma","samantha","allison","susan","zoe","karen","victoria","fiona","tessa","serena","moira","catherine","kate","zira","hazel","libby","sonia","clara","amber","ashley","nova","paulina","sabina","dalia","monica","mónica","montse","conchita","lucia","lucía","lupe","marisol","ximena","renata","carlota","esperanza","angelica","angélica","female","mujer","femenin"];
+function guessGender(v){const n=(v.name||"").toLowerCase();if(MPOOL.some(x=>n.includes(x)))return"m";if(FPOOL.some(x=>n.includes(x)))return"f";return"";}
+function maleScore(v){const n=(v.name||"").toLowerCase();let s=0;if(MPOOL.some(x=>n.includes(x)))s+=60;if(FPOOL.some(x=>n.includes(x)))s-=90;if(/natural|online/.test(n))s+=40;if(/google|enhanced|premium|siri/.test(n))s+=15;return s;}
+function brianCandidates(){const all=synth.getVoices();let pool=allLangsB?all.slice():all.filter(v=>(v.lang||"").toLowerCase().startsWith("en"));if(!pool.length)pool=all.slice();return pool.map(v=>[maleScore(v),v]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);}
+function cycleBrian(){const c=brianCandidates();if(!c.length)return;let i=c.findIndex(v=>vB&&v.name===vB.name&&v.lang===vB.lang);vB=c[(i+1+c.length)%c.length];manualB=true;refreshVoiceUI();previewBrian();}
+function previewBrian(){synth.cancel();const b=new SpeechSynthesisUtterance("Hi, I'm Brian — this is the voice I'll use.");if(vB)b.voice=vB;b.pitch=brianPitch;b.rate=userRate;b.lang=(vB&&vB.lang)||"en-US";synth.speak(b);}
+function toggleAllB(cb){allLangsB=cb.checked;refreshVoiceUI();}
+function fillSel(id,ranked,chosen){const sel=document.getElementById(id);if(!sel)return;sel.innerHTML="";ranked.forEach(v=>{const o=document.createElement("option");o.value=v.name+"|"+v.lang;o.textContent=vLabel(v);if(chosen&&v.name===chosen.name&&v.lang===chosen.lang)o.selected=true;sel.appendChild(o);});}
+function refreshVoiceUI(){
+  if(!document.getElementById("selA"))return;
+  const all=synth.getVoices(), lv=langVoices();
+  const f=rankVoicesEN(all,"f").filter(v=>lv.includes(v)); const m=rankVoicesEN(all,"m").filter(v=>lv.includes(v));
+  const ordF=[...f,...lv.filter(v=>!f.includes(v))]; const ordM=[...m,...lv.filter(v=>!m.includes(v))];
+  fillSel("selA",ordF,vA); fillSel("selB",brianCandidates(),vB);
+  const ab=document.getElementById("allB");if(ab)ab.checked=allLangsB;
+  buildAccentChips();
+}
+const ACC_EN={"en-us":"American","en-gb":"British","en-au":"Australian","en-ie":"Irish","en-in":"Indian","en-za":"South African","en-ca":"Canadian","en-nz":"NZ"};
+function friendlyAcc(lang){return ACC_EN[(lang||"").toLowerCase()]||lang;}
+function buildAccentChips(){
+  const box=document.getElementById("accB");if(!box)return;
+  const males=rankVoicesEN(synth.getVoices(),"m").filter(v=>(v.lang||"").toLowerCase().startsWith("en")&&guessGender(v)==="m");
+  const langs=[],seen=[];
+  males.forEach(v=>{const l=(v.lang||"").toLowerCase();if(!seen.includes(l)){seen.push(l);langs.push(v.lang);}});
+  box.innerHTML="";
+  if(!langs.length){box.innerHTML='<span class="accnote">⚠ No male English voice is installed on this device, so Brian may sound female. Turn on “All voices” above to assign any male voice, or install one in your device’s speech settings.</span>';return;}
+  langs.forEach(l=>{const c=document.createElement("button");c.className="acc"+((vB&&vB.lang===l)?" on":"");c.textContent=friendlyAcc(l);c.onclick=()=>setBrianAccent(l);box.appendChild(c);});
+  if(langs.length<=1){const n=document.createElement("span");n.className="accnote";n.textContent="Tip: add more voices in your device’s speech settings for more accents — or use “All voices” to try a different character.";box.appendChild(n);}
+}
+function setBrianAccent(lang){
+  const all=synth.getVoices();
+  const v=rankVoicesEN(all,"m").find(x=>x.lang===lang)||all.find(x=>x.lang===lang);
+  if(!v)return; vB=v; manualB=true; refreshVoiceUI();
+  if(playing&&cur>0&&cur<10){restartIfPlaying();}
+  else{synth.cancel();const b=new SpeechSynthesisUtterance("Here's how I sound with this accent.");b.voice=vB;b.pitch=brianPitch;b.rate=userRate;b.lang=vB.lang;synth.speak(b);}
+}
+function findVoice(val){const i=val.lastIndexOf("|");const n=val.slice(0,i),l=val.slice(i+1);return synth.getVoices().find(v=>v.name===n&&v.lang===l);}
+function pickVoiceA(val){const v=findVoice(val);if(v){vA=v;manualA=true;restartIfPlaying();}}
+function pickVoiceB(val){const v=findVoice(val);if(v){vB=v;manualB=true;restartIfPlaying();}}
+function setRate(v){userRate=parseFloat(v);document.getElementById("rateLbl").textContent=parseFloat(v).toFixed(2)+"×";}
+function setDepth(v){brianPitch=parseFloat(v);const x=parseFloat(v);document.getElementById("depLbl").textContent=x>=1?"energetic":x>=0.93?"lively":x>=0.85?"clear":x>=0.78?"deep":"deepest";}
+function restartIfPlaying(){if(playing&&cur>0&&cur<10){synth.cancel();buildUtts(cur);synth.speak(utts[0]);}}
+function toggleVset(){const p=document.getElementById("vset");p.classList.toggle("on");document.getElementById("vgear").classList.toggle("on");if(p.classList.contains("on"))refreshVoiceUI();}
+function testVoices(){synth.cancel();
+  const a=new SpeechSynthesisUtterance("Hi, I'm Anna — this is how I'll sound.");if(vA)a.voice=vA;a.pitch=annaPitch;a.rate=userRate;a.lang=(vA&&vA.lang)||"en-US";
+  const b=new SpeechSynthesisUtterance("And I'm Brian. Clear and steady — that's the goal.");if(vB)b.voice=vB;b.pitch=brianPitch;b.rate=userRate;b.lang=(vB&&vB.lang)||"en-US";
+  a.onend=()=>setTimeout(()=>synth.speak(b),220);synth.speak(a);}
+function resetVoice(){manualA=false;manualB=false;userRate=1;brianPitch=1.0;loadV();
+  const rs=document.getElementById("rateSld");if(rs)rs.value=1;const ds=document.getElementById("depSld");if(ds)ds.value=1;setRate(1);setDepth(1);refreshVoiceUI();}
+
+function strip(h){return h.replace(/<[^>]+>/g,"").replace(/&[a-z#0-9]+;/g," ").replace(/\s+/g," ").trim()}
+
+// Make acronyms & smartphrases sound right when spoken aloud (display text is untouched).
+function speechClean(t){
+  t=strip(t);
+  const map=[
+    [/\.CALAIMSTEPUP\b/gi,"dot Cal-Aim Step Up"],
+    [/\.CALAIMUNSUCCESSFUL\b/gi,"dot Cal-Aim Unsuccessful"],
+    [/\.CALAIMSTEPDOWN\b/gi,"dot Cal-Aim Step Down"],
+    [/\.STEPUPRC\b/gi,"dot Step Up R C"],
+    [/\.STEPUPHTN\b/gi,"dot Step Up H T N"],
+    [/\.STEPUPDM\b/gi,"dot Step Up D M"],
+    [/\.STEPUPBH\b/gi,"dot Step Up B H"],
+    [/\.STEPUPSTRESS\b/gi,"dot Step Up Stress"],
+    [/\.STEPUPOBESITY\b/gi,"dot Step Up Obesity"],
+    [/\.STEPUPPREVENTION\b/gi,"dot Step Up Prevention"],
+    [/dot-calaim/gi,"dot Cal-Aim"],
+    [/\.calaim\b/gi,"dot Cal-Aim"],
+    [/CalAIM/g,"Cal-Aim"],
+    [/\bECM\b/g,"E C M"],
+    [/\bDHCS\b/g,"D H C S"],
+    [/\bSFHP\b/g,"S F H P"],
+    [/\bOCHIN\b/g,"Oh-chin"],
+    [/\bNCQA\b/g,"N C Q A"],
+    [/\bVBP\b/g,"V B P"],
+    [/\bMNHC\b/g,"M N H C"],
+    [/\bSDoH\b/g,"S D O H"],
+    [/\bAllSDoH\b/gi,"All S D O H"],
+    [/\bPCP\b/g,"P C P"],
+    [/\bLOS\b/g,"L O S"],
+    [/\bDX\b/g,"diagnosis"],
+    [/\bCHG-?(\d+)/g,"C H G $1"],
+    [/\bLTSS\b/g,"L T S S"],
+    [/\bSOP\b/g,"S O P"],
+  ];
+  map.forEach(([re,rep])=>{t=t.replace(re,rep);});
+  return t;
+}
+function splitSentences(t){
+  const m=t.match(/[^.!?]+[.!?]+|\S[^.!?]*$/g);
+  return (m?m.map(s=>s.trim()).filter(Boolean):[t]);
+}
+
+function buildUtts(ep){
+  utts=[];uIdx=0;
+  const cv=CV[ep];if(!cv)return;
+  cv.forEach((msg,i)=>{
+    const u=new SpeechSynthesisUtterance(speechClean(msg.t));
+    u.rate=spd*userRate*(msg.w==="a"?1.0:1.04);
+    u.pitch=msg.w==="a"?annaPitch:brianPitch;
+    u.volume=msg.w==="a"?0.96:1.0;
+    if(msg.w==="a"&&vA)u.voice=vA;
+    if(msg.w==="b"&&vB)u.voice=vB;
+    u.onstart=()=>{hlMsg(ep,i);setWave(true);};
+    u.onend=()=>{uIdx++;if(uIdx>=utts.length){playing=false;setWave(false);document.getElementById("playbtn").textContent="▶";}};
+    u.onerror=(e)=>{if(e.error==="interrupted"||e.error==="canceled")return;uIdx++;if(uIdx>=utts.length){playing=false;setWave(false);document.getElementById("playbtn").textContent="▶";}};
+    utts.push(u);
+  });
+}
+
+
+function animEp(n){
+  if(n===1)["p3","p4","p2","p1"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===2)["pl1","pl2","pl3","pl4"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===3)["hj1","hj2","hj3"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===4)["mh1","mh2","mh3","mh4"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===5)["ut1","ut2","ut3"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===6)["be1","be2"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===7)["ltc1","ltc2","ltc3","ltc4","ltc5"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+  if(n===8)["rd1","rd2","rd3","rd4","rd5"].forEach((id,i)=>setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.opacity='1';},200+i*280));
+}
+function hlMsg(ep,idx){
+  document.querySelectorAll("#c"+ep+" .msg").forEach((m,i)=>{
+    m.style.opacity=i===idx?"1":"0.38";
+    m.style.transform=i===idx?"scale(1.015)":"scale(1)";
+  });
+}
+const TOTAL=11;
+const ET=["ECM Populations of Focus","Ep 1: Why POFs Matter","Ep 2: Policy Layers","Ep 3: Homeless & Justice","Ep 4: Serious MH/SUD","Ep 5: High ED Utilization","Ep 6: Birth Equity","Ep 7: LTC Risk","Ep 8: Registries & Metrics","Knowledge Check Quiz","Training Complete!"];
+const SM={0:[0,1,2],1:[3,4,5,6,7],2:[8],3:[9,10]};
+let cur=0;
+function getSec(n){for(const[s,eps]of Object.entries(SM)){if(eps.includes(n))return parseInt(s);}return 0;}
+function goSec(s){goTo(SM[s][0]);}
+function goTo(n){
+  if(n<0||n>=TOTAL)return;
+  synth.cancel();playing=false;setWave(false);document.getElementById('playbtn').textContent='&#9654;';
+  document.getElementById('ep'+cur).classList.remove('on');
+  cur=n;
+  document.getElementById('ep'+cur).classList.add('on');
+  if(CV[cur])renderConvo(cur);
+  if(cur===9)renderQuiz();
+  animEp(cur);
+  upNav();
+  if(CV[cur]&&cur>0)setTimeout(()=>{synth.cancel();buildUtts(cur);utts.forEach(u=>synth.speak(u));playing=true;setWave(true);document.getElementById('playbtn').textContent='&#9646;&#9646;';},700);
+}
+function goNext(){if(cur===9&&!qDone){alert('Please answer all 8 questions first.');return;}if(cur<TOTAL-1)goTo(cur+1);}
+function goBack(){if(cur>0)goTo(cur-1);}
+function upNav(){
+  const p=Math.round((cur/(TOTAL-1))*100);
+  document.getElementById('pb').style.width=p+'%';
+  document.getElementById('epctr').textContent='Episode '+(Math.max(cur,1))+' of '+(TOTAL-1);
+  document.getElementById('ni').textContent='Episode '+(cur+1)+' of '+TOTAL;
+  document.getElementById('btnbk').style.display=cur===0?'none':'';
+  document.getElementById('btnnx').textContent=cur===TOTAL-1?'Finish ✓':'Next →';
+  document.getElementById('ptitle').textContent=ET[cur]||'ECM POF Training';
+  const sec=getSec(cur);
+  document.querySelectorAll('.stab').forEach((t,i)=>t.classList.toggle('on',i===sec));
+  const d=document.getElementById('dots');d.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const dt=document.createElement('div');dt.className='dot'+(i===cur?' ac':i<cur?' vi':'');dt.onclick=()=>goTo(i);dt.title='Episode '+(i+1);d.appendChild(dt);}
+}
+function renderConvo(ep){
+  if(cvRend[ep])return;
+  const cv=CV[ep];if(!cv)return;
+  const cont=document.getElementById('c'+ep);if(!cont)return;
+  cont.innerHTML='';
+  cv.forEach(msg=>{
+    const d=document.createElement('div');d.className='msg '+msg.w;
+    d.innerHTML='<div class="mav '+msg.w+'">'+(msg.w==='a'?'A':'B')+'</div><div class="mbody"><div class="mname">'+msg.n+'</div><div class="bubble">'+msg.t+'</div></div>';
+    cont.appendChild(d);
+  });
+  cvRend[ep]=true;
+}
+function togglePlay(){
+  if(cur===0||cur>=9)return;
+  if(playing){synth.pause();playing=false;setWave(false);document.getElementById('playbtn').textContent='&#9654;';}
+  else{if(synth.paused&&synth.speaking){synth.resume();}else{synth.cancel();if(CV[cur]){buildUtts(cur);utts.forEach(u=>synth.speak(u));}}playing=true;setWave(true);document.getElementById('playbtn').textContent='&#9646;&#9646;';}
+}
+window.onload=()=>{
+  goTo(0);
+  // Pre-warm voices: silent 0-volume utterance for each voice so
+  // the browser pre-loads them and transitions are instant
+  const warmUp=()=>{
+    ['a','b'].forEach(spk=>{
+      const v=spk==='a'?vA:vB;
+      if(!v)return;
+      const w=new SpeechSynthesisUtterance(' ');
+      w.voice=v;w.volume=0;w.rate=1;
+      synth.speak(w);
+    });
+  };
+  // Voices may not be loaded yet — wait for them
+  if(synth.getVoices().length){setTimeout(warmUp,800);}
+  else{synth.addEventListener('voiceschanged',()=>setTimeout(warmUp,400),{once:true});}
+};
+function setWave(on){document.getElementById("wave").classList.toggle("go",on);}
+function setSpd(s,el){spd=s;document.querySelectorAll(".spdbtn").forEach(b=>b.classList.remove("on"));el.classList.add("on");if(playing){synth.cancel();playing=false;setWave(false);document.getElementById("playbtn").textContent="▶";}}
+function renderQuiz(){
+  if(qRend)return;
+  const c=document.getElementById("qcont");c.innerHTML="";
+  QUIZ.forEach((q,qi)=>{
+    const d=document.createElement("div");d.className="qblock";
+    d.innerHTML=`<div class="qnum">Question ${qi+1} of ${QUIZ.length}</div><div class="qqq">${q.q}</div><div class="qopts" id="qo${qi}">${q.opts.map((o,oi)=>`<button class="qopt" onclick="ansQ(${qi},${oi})">${String.fromCharCode(65+oi)}. ${o}</button>`).join("")}</div><div class="qfb" id="qf${qi}"></div>`;
+    c.appendChild(d);
+  });
+  qRend=true;
+}
+function ansQ(qi,ch){
+  if(qAns[qi]!==undefined)return;
+  qAns[qi]=ch;const q=QUIZ[qi];
+  document.querySelectorAll("#qo"+qi+" .qopt").forEach((o,i)=>{o.disabled=true;if(i===q.c)o.classList.add("co");else if(i===ch)o.classList.add("wr");});
+  const fb=document.getElementById("qf"+qi);fb.className="qfb sh "+(ch===q.c?"co":"wr");fb.textContent=(ch===q.c?"\u2713 Correct! ":"\u2717 ") + (q.exp||q.fc||q.fw||"");
+  const ct=Object.keys(qAns).length;
+  document.getElementById("qct").textContent=ct+" / "+QUIZ.length;
+  document.getElementById("qpf").style.width=(ct/QUIZ.length*100)+"%";
+  if(ct===QUIZ.length){qDone=true;showScore();}
+}
+function calcSc(){return QUIZ.reduce((a,q,i)=>a+(qAns[i]===q.c?1:0),0);}
+function showScore(){
+  const s=calcSc(),p=Math.round(s/QUIZ.length*100);
+  document.getElementById("spct").textContent=p+"%";
+  document.getElementById("spts").textContent=s+"/"+QUIZ.length;
+  const m=p>=88?["🎉 Outstanding!","You have strong command of ECM Populations of Focus eligibility criteria."]:p>=63?["✓ Good — Passing","Review the episodes you missed before your next ECM referral decision."]:["Needs Review","Please revisit Sections 2 and 3 before making ECM referral decisions."];
+  document.getElementById("smsg").textContent=m[0];
+  document.getElementById("ssub").textContent=m[1];
+  document.getElementById("sbox").classList.add("sh");
+  document.getElementById("qst").textContent="Quiz complete — scroll down for your score";
+  document.getElementById("sbox").scrollIntoView({behavior:"smooth",block:"center"});
+}
+</script>
+</body>
+</html>
